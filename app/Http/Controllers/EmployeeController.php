@@ -46,4 +46,12 @@ class EmployeeController extends Controller
     {
         //
     }
+    public function test_get_all_employees()
+    {
+        Employee::factory()->count(2)->create();
+
+        $response = $this->getJson('/api/employees');
+
+        $response->assertStatus(200);
+    }
 }
