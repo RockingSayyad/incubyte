@@ -88,4 +88,17 @@ public function salary($id)
         'net_salary' => $net
     ]);
 }
+public function test_salary_metrics_by_country()
+    {
+        Employee::factory()->create(['country' => 'India', 'salary' => 10000]);
+        Employee::factory()->create(['country' => 'India', 'salary' => 20000]);
+
+        $response = $this->getJson('/api/salary/metrics?country=India');
+
+        $response->assertJson([
+            'min' => 10000,
+            'max' => 20000,
+            'avg' => 15000
+        ]);
+    }
 }
