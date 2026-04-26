@@ -101,4 +101,18 @@ public function test_salary_metrics_by_country()
             'avg' => 15000
         ]);
     }
+    public function metrics(Request $request)
+    {
+        if ($request->country) {
+            $employees = Employee::where('country', $request->country);
+        } elseif ($request->job_title) {
+            $employees = Employee::where('job_title', $request->job_title);
+        }
+
+        return response()->json([
+            'min' => $employees->min('salary'),
+            'max' => $employees->max('salary'),
+            'avg' => $employees->avg('salary'),
+        ]);
+    }
 }
