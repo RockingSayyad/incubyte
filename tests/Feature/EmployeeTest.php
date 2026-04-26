@@ -3,24 +3,30 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-
+use App\Models\Employee;
 class EmployeeTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-   public function test_create_employee()
- {
-    $response = $this->postJson('/api/employees', [
-        'full_name' => 'Nawaz',
-        'job_title' => 'Developer',
-        'country' => 'India',
-        'salary' => 50000
-    ]);
+    use RefreshDatabase; // clean DB for every test
 
-    $response->assertStatus(201)
-             ->assertJsonFragment(['full_name' => 'Nawaz']);
-  }
+    public function test_create_employee()
+    {
+        $response = $this->postJson('/api/employees', [
+            'full_name' => 'Nawaz',
+            'job_title' => 'Developer',
+            'country' => 'India',
+            'salary' => 50000
+        ]);
+
+        $response->assertStatus(201)
+                 ->assertJsonFragment([
+                     'full_name' => 'Nawaz',
+                     'job_title' => 'Developer'
+                 ]);
+
+        $this->assertDatabaseHas('employees', [
+            'full_name' => 'Nawaz',
+            'country' => 'India'
+        ]);
+    }
 }
