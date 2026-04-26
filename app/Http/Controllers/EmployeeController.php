@@ -54,4 +54,18 @@ class EmployeeController extends Controller
 
         $response->assertStatus(200);
     }
+
+    public function test_salary_calculation_india()
+{
+    $employee = Employee::factory()->create([
+        'country' => 'India',
+        'salary' => 10000
+    ]);
+
+    $response = $this->getJson("/api/employees/{$employee->id}/salary");
+
+    $response->assertJson([
+        'net_salary' => 9000
+    ]);
+}
 }
