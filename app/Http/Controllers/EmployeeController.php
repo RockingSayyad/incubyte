@@ -68,4 +68,24 @@ class EmployeeController extends Controller
         'net_salary' => 9000
     ]);
 }
+
+public function salary($id)
+{
+    $employee = Employee::findOrFail($id);
+
+    $gross = $employee->salary;
+
+    if ($employee->country === 'India') {
+        $net = $gross * 0.9;
+    } elseif ($employee->country === 'United States') {
+        $net = $gross * 0.88;
+    } else {
+        $net = $gross;
+    }
+
+    return response()->json([
+        'gross_salary' => $gross,
+        'net_salary' => $net
+    ]);
+}
 }
